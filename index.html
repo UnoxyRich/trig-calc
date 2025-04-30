@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<!--why the hell are you seeing this you freaking nerd (bro thinks he's a hacker by clicking on inspect or f12)-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Triangle Trig Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f7f7f7;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+
+    h2 {
+      margin-bottom: 10px;
+    }
+
+    .triangle-wrapper {
+      position: relative;
+      width: 360px;
+      height: 360px;
+      margin-bottom: 20px;
+    }
+
+    svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    input {
+      position: absolute;
+      width: 60px;
+      padding: 4px;
+      font-size: 14px;
+      text-align: center;
+      background-color: rgba(255, 255, 255, 0.1); /* transparent */
+      border: 1px solid #aaa;
+      border-radius: 4px;
+      pointer-events: auto;
+    }
+
+    .output {
+      background: white;
+      padding: 15px;
+      border-radius: 6px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 360px;
+    }
+
+    .output p {
+      margin: 5px 0;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Triangle Trig Calculator</h2>
+
+<div class="triangle-wrapper">
+  <svg id="triangleSVG" viewBox="0 0 300 300" preserveAspectRatio="xMidYMid meet">
+    <polygon id="triangle" points="" fill="lightblue" stroke="black" stroke-width="2" />
+    <text id="angleA" font-size="12" fill="black">A</text>
+    <text id="angleB" font-size="12" fill="black">B</text>
+    <text id="angleC" font-size="12" fill="black">C</text>
+  </svg>
+
+  <input type="number" id="inputA" placeholder="Side a">
+  <input type="number" id="inputB" placeholder="Side b">
+  <input type="number" id="inputC" placeholder="Side c">
+</div>
+
+<div class="output" id="output"></div>
+
+<script>
+  const inputA = document.getElementById('inputA');
+  const inputB = document.getElementById('inputB');
+  const inputC = document.getElementById('inputC');
+  const output = document.getElementById('output');
+  const triangle = document.getElementById('triangle');
+
+  function updateTriangle() {
+    const a = parseFloat(inputA.value);
+    const b = parseFloat(inputB.value);
+    const c = parseFloat(inputC.value);
+
+    if (isNaN(a) || isNaN(b) || isNaN(c)) {
+      output.innerHTML = "<p style='color:red;'>Enter all three sides.</p>";
+      triangle.setAttribute("points", "");
+      return;
+    }
+
+    if (a + b <= c || a + c <= b || b + c <= a) {
+      output.innerHTML = "<p style='color:red;'>Invalid triangle: violates triangle inequality.</p>";
+      triangle.setAttribute("points", "");
+      return;
+    }
+
+    const angleA = Math.acos((b**2 + c**2 - a**2) / (2 * b * c)) * (180 / Math.PI);
+    const angleB = Math.acos((a**2 + c**2 - b**2) / (2 * a * c)) * (180 / Math.PI);
+    const angleC = 180 - angleA - angleB;
+
+    output.innerHTML = `
+      <p><strong>Side a:</strong> ${a.toFixed(2)}</p>
+      <p><strong>Side b:</strong> ${b.toFixed(2)}</p>
+      <p><strong>Side c:</strong> ${c.toFixed(2)}</p>
+      <p><strong>Angle A:</strong> ${angleA.toFixed(2)}°</p>
+      <p><strong>Angle B:</strong> ${angleB.toFixed(2)}°</p>
+      <p><strong>Angle C:</strong> ${angleC.toFixed(2)}°</p>
+    `;
+
+    // Coordinates
+    const scale = 100 / Math.max(a, b, c);
+    const Ax = 100, Ay = 200;
+    const Bx = Ax + c * scale, By = Ay;
+
+    const angleC_rad = Math.acos((a**2 + b**2 - c**2) / (2 * a * b));
+    const Cx = Ax + b * scale * Math.cos(angleC_rad);
+    const Cy = Ay - b * scale * Math.sin(angleC_rad);
+
+    triangle.setAttribute("points", `${Ax},${Ay} ${Bx},${By} ${Cx},${Cy}`);
+
+    // Set angle label positions
+    document.getElementById("angleA").setAttribute("x", Ax - 12);
+    document.getElementById("angleA").setAttribute("y", Ay + 15);
+
+    document.getElementById("angleB").setAttribute("x", Bx + 5);
+    document.getElementById("angleB").setAttribute("y", By + 15);
+
+    document.getElementById("angleC").setAttribute("x", Cx);
+    document.getElementById("angleC").setAttribute("y", Cy - 10);
+
+    // Offset to reduce input overlap
+    const offset = 25;
+
+    // Side a (between B and C)
+    document.getElementById("inputA").style.left = `${(Bx + Cx) / 2 - 30}px`;
+    document.getElementById("inputA").style.top  = `${(By + Cy) / 2 - offset}px`;
+
+    // Side b (between A and C)
+    document.getElementById("inputB").style.left = `${(Ax + Cx) / 2 - 30}px`;
+    document.getElementById("inputB").style.top  = `${(Ay + Cy) / 2 - offset}px`;
+
+    // Side c (between A and B)
+    document.getElementById("inputC").style.left = `${(Ax + Bx) / 2 - 30}px`;
+    document.getElementById("inputC").style.top  = `${(Ay + By) / 2 + offset}px`;
+  }
+
+  // Default scalene values
+  inputA.value = 7;
+  inputB.value = 8;
+  inputC.value = 9;
+
+  [inputA, inputB, inputC].forEach(input => input.addEventListener('input', updateTriangle));
+  updateTriangle();
+</script>
+
+</body>
+</html>
