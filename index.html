@@ -89,6 +89,9 @@
     if (isNaN(a) || isNaN(b) || isNaN(c)) {
       output.innerHTML = "<p style='color:red;'>Enter all three sides.</p>";
       triangle.setAttribute("points", "");
+      document.getElementById("angleA").setAttribute("visibility", "hidden");
+      document.getElementById("angleB").setAttribute("visibility", "hidden");
+      document.getElementById("angleC").setAttribute("visibility", "hidden");
       return;
     }
 
@@ -120,14 +123,17 @@
     const Cx = Ax + b * scale * Math.cos(angleC_rad);
     const Cy = Ay - b * scale * Math.sin(angleC_rad);
 
-    triangle.setAttribute("points", `${Ax},${Ay} ${Bx},${By} ${Cx},${Cy}`);
-
-    // Set angle label positions
     document.getElementById("angleA").setAttribute("x", Ax - 12);
     document.getElementById("angleA").setAttribute("y", Ay + 15);
+    document.getElementById("angleA").setAttribute("visibility", "visible");
 
     document.getElementById("angleB").setAttribute("x", Bx + 5);
     document.getElementById("angleB").setAttribute("y", By + 15);
+    document.getElementById("angleB").setAttribute("visibility", "visible");
+
+    document.getElementById("angleC").setAttribute("x", Cx);
+    document.getElementById("angleC").setAttribute("y", Cy - 10);
+    document.getElementById("angleC").setAttribute("visibility", "visible");
 
     document.getElementById("angleC").setAttribute("x", Cx);
     document.getElementById("angleC").setAttribute("y", Cy - 10);
