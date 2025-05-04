@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Triangle Trig Calculator</title>
+  <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+
+  <header>
+    <h1>Triangle Trig Calculator</h1>
+  </header>
+
+  <main>
+    <section class="triangle-wrapper">
+      <svg id="triangleSVG" viewBox="0 0 300 300" preserveAspectRatio="xMidYMid meet">
+        <polygon id="triangle" points="" fill="lightblue" stroke="black" stroke-width="2" />
+        <text id="angleA" font-size="12" fill="black">A</text>
+        <text id="angleB" font-size="12" fill="black">B</text>
+        <text id="angleC" font-size="12" fill="black">C</text>
+      </svg>
+
+      <div class="input-fields">
+        <input type="number" id="inputA" placeholder="Side a" />
+        <input type="number" id="inputB" placeholder="Side b" />
+        <input type="number" id="inputC" placeholder="Side c" />
+      </div>
+    </section>
+
+    <section class="output" id="output"></section>
+  </main>
+
+  <footer>
+    <p>&copy; 2023 Triangle Trig Calculator</p>
+  </footer>
+
+  <script src="scripts/app.js"></script>
+</body>
+</html>
